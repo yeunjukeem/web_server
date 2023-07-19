@@ -46,10 +46,11 @@ class Mysql:
         
         sql = '''insert into user (username, email, phone, password) values(%s,%s,%s,%s)'''
         hashed_password = hash_password(password)
-        result = curs.execute(sql,(username, email, phone, hashed_password))
+        result = curs.execute(sql,(username, email, phone, hashed_password)) #sql로 보내는 것
         print(result)
         db.commit()
         db.close()
+        return result
 
     def verify_password(self, password, email):    
         db = pymysql.connect(host=self.host, user=self.user, db=self.db, password=self.password, charset=self.charset)

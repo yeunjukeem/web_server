@@ -1,4 +1,7 @@
+# .gitignore
+
 /Lib
 /Include
 /Scripts
 pyvenv.cfg
+config.py
