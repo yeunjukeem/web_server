@@ -9,16 +9,16 @@
 </head>
 <body>
     <h1>Hello World!!</h1>
-    {% if session['is_logged_in'] == True %}
+    {% if session['is_loged_in'] %}
     
-    <h3> Welcome! {{session['username']}}  </h3>
+    <h3> {{session['username']}} 님, 환영합니다. </h3>
     <a href="/logout"><button class="btn btn-danger">로그아웃</button></a>
     {% else %}
     <h3>게스트로 접속하셨습니다.</h3>
         
     <a href="/register"><button class="btn btn-warning">회원가입</button></a>
     <a href="/login"><button class="btn btn-primary">로그인</button></a>
-    
+
     {% endif %}
 </body>
 </html>
