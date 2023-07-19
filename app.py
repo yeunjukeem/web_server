@@ -1,5 +1,5 @@
 #app.py
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from data import Articles
 from mysql import Mysql
 import config
@@ -62,14 +62,35 @@ def register():
         print(rows)
         # 아래 오류방지를 위해서...
         if rows:
-            return "Persistance Denied"
+            return render_template('register.html', data = 1)
         else:
             result = mysql.insert_user(username, email, phone, password)
             print(result)
-            return "SUCCESS"
+            return redirect('/login')
     elif request.method == 'GET':
-        return render_template('register.html')
+        return render_template('register.html', data = 0)
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+    if request.method =='GET':
+        return render_template('login.html')
+    elif request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
     
+        db = pymysql.connect(host=mysql.host, user=mysql.user, db=mysql.db, password=mysql.password, charset=mysql.charset)
+        curs = db.cursor()
+
+        sql = f'SELECT * FROM user WHERE email = %s;'
+        curs.execute(sql, email)
+        
+        rows = curs.fetchall()             
+        print(rows)
+        # 아래 오류방지를 위해서...
+        if rows:
+            return render_template('login.html')
+        else:
+            return "User is NOT founded"
 
 if __name__ == '__main__':
     app.run(debug=True)
