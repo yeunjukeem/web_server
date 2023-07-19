@@ -14,7 +14,7 @@ def hash_password(original_password):
     password = pbkdf2_sha256.hash(password)
     return password
 def check_password(input_password, hashed_password):
-    salt='eungok'
+    salt='1234'
     password = input_password + salt
     result = pbkdf2_sha256.verify(password, hashed_password)
     return result
@@ -52,27 +52,29 @@ class Mysql:
         db.close()
         return result
 
-    def verify_password(self, password, email):    
-        db = pymysql.connect(host=self.host, user=self.user, db=self.db, password=self.password, charset=self.charset)
-        curs = db.cursor()
+    def verify_password(self, password, hashed_password):    
+        # db = pymysql.connect(host=self.host, user=self.user, db=self.db, password=self.password, charset=self.charset)
+        # curs = db.cursor()
 
-        sql = f'SELECT * FROM user WHERE email = %s;'
-        curs.execute(sql, email)
+        # sql = f'SELECT * FROM user WHERE email = %s;'
+        # curs.execute(sql, email)
         
-        rows = curs.fetchall()             
-        print(rows)
+        # rows = curs.fetchall()             
+        # print(rows)
         # db.commit()
-        db.close()
+        # db.close()
 
-        if len(rows) != 0:
-            hashed_password = rows[0][4]
-            result = check_password(password, hashed_password)
-            if result:
-                print("SUCCESS")
-            else:
-                print("MissMatch Password!")
-        else:
-            print("User is not exist")
+        # if len(rows) != 0:
+        #     hashed_password = rows[0][4]
+        #     result = check_password(password, hashed_password)
+        #     if result:
+        #         print("SUCCESS")
+        #     else:
+        #         print("MissMatch Password!")
+        # else:
+        #     print("User is not exist")
+        result = check_password(password, hashed_password)
+        return result
 
     def del_user(self, email):
         db = pymysql.connect(host=self.host, user=self.user, db=self.db, password=self.password, charset=self.charset)
@@ -83,7 +85,7 @@ class Mysql:
         db.commit()
         db.close()
 
-mysql = Mysql(password='java')
+# mysql = Mysql(password='java')
 # rows = mysql.get_user()
 # print(rows)
 
@@ -97,5 +99,5 @@ mysql = Mysql(password='java')
 
 # mysql.verify_password("1234","2@naver.com")
 
-mysql.verify_password("1234", "1@naver.com" )
+# mysql.verify_password("1234", "1@naver.com" )
     

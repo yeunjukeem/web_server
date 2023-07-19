@@ -1,5 +1,5 @@
 #app.py
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from data import Articles
 from mysql import Mysql
 import config
@@ -7,6 +7,7 @@ import pymysql
 # print(Articles())
 
 app = Flask(__name__)
+app.secret_key = "My_Key" #세션을 위해서 추가
 mysql = Mysql(password=config.PASSWORD)
 
 @app.route('/', methods=['GET','POST'])
@@ -88,9 +89,17 @@ def login():
         print(rows)
         # 아래 오류방지를 위해서...
         if rows:
-            return render_template('login.html')
+            result = mysql.verify_password(password, rows[0][4])
+            print(result)
+            if result:
+                session['is_logged_in'] = True
+                session['username'] = rows[0][1]
+                return redirect('/')
+            else:
+                return redirect('/login')
+            return str(rows[0][4])
         else:
-            return "User is NOT founded"
+            return render_template('login.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
