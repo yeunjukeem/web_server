@@ -31,7 +31,7 @@ def index():
 #         print(data2)
 #         return render_template('index.html', header="안녕하세요.")
 
-    return render_template('index.html')
+    return render_template('layouts.html')
 
 @app.route('/hello', methods=['GET', 'POST'])
 def hello():

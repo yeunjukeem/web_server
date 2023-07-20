@@ -1,4 +1,4 @@
-from flask import Flask , render_template ,request ,redirect ,session
+from flask import Flask , render_template ,request ,redirect ,session, url_for
 from data import Articles
 from mysql import Mysql
 import config
@@ -11,8 +11,9 @@ from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = "eungok"
-# app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=1)
-
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=1)
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_TYPE'] = 'filesystem'
 
 mysql = Mysql(password=config.PASSWORD)
 
@@ -26,7 +27,7 @@ def is_loged_in(func):
     return wrap
 
 @app.route('/' , methods=['GET','POST'])
-@is_loged_in #함수에 decorator('@')를 붙여주면, 
+#@is_loged_in #함수에 decorator('@')를 붙여주면, 
 def index():
     # if request.method == "GET":
     #     os_info = dict(request.headers)
